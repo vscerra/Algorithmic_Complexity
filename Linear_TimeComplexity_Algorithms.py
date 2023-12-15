@@ -4,8 +4,9 @@ Created on Wed Dec 13 14:18:31 2023
 
 @author: vscerra
 """
-# These are some examples of common algorithms with time complexity of O(n) in 
-# the worst case scenario. 
+# These are some examples of common algorithms with a maximum time complexity of O(n)
+
+#%% Linear Search
 
 # For each of these, the space complexity is O(1) or 
 # O(k) as written (k <= n), as additional space is only needed to hold i, 
@@ -67,3 +68,90 @@ def count_occurrences(arr, target):
 
 occurrences = count_occurrences(my_list, target_element)
 print(f'{target_element} occurs {occurrences} times in my_list')
+
+#%% Counting sort 
+
+# Counting sort is a non-comparison based algorithm that's useful when the 
+# input is known and relatively small
+
+# In all below count_sorting cases, the space complexity is defined by the size 
+# of the `count` variable, and ranges from n (size of input) to k (size of maximum value of arr) 
+# leaving each with a space complexity of O(k)
+
+
+# Sorting non-negative integers
+def counting_sort(arr):
+  max_val = max(arr)
+  count = [0] * (max_val + 1)
+  for num in arr:
+    count[num] += 1
+  
+  sorted_arr = []
+  for i in range(len(count)):
+    sorted_arr.extend([i] * count[i])
+  
+  return sorted_arr
+
+
+my_list = [4, 2, 3, 1, 0, 4, 6, 1, 2, 5, 6]
+sorted_list = counting_sort(my_list)
+print(f'Original list is {my_list}')
+print(f'Sorted by value, the list is now {sorted_list}')
+
+# Example: Sort students by test score 
+class Student: 
+  def __init__(self, name, score):
+    self.name = name
+    self.score = score
+
+
+def counting_sort_students(students):
+  max_score = max(student.score for student in students)
+  count = [0] * (max_score + 1)
+  
+  for student in students:
+    count[student.score] += 1
+  
+  # Calculate the cumulative count
+  for i in range(1, len(count)):
+    count[i] += count[i-1]
+    
+  # Create the sorted array
+  sorted_students = [None] * len(students)
+  for student in reversed(students):
+    index = count[student.score] - 1
+    sorted_students[index] = student
+    count[student.score] -= 1
+  
+  return sorted_students
+
+students = [Student("Olive",100), Student("Newton", 95), Student("Nala", 89), Student("Marisol", 92), Student("Charles", 64), Student("Hajun", 85), Student("Roger", 57), Student("Dharm", 75)]
+sorted_students = counting_sort_students(students)
+print("Sorted students by score:")
+for student in sorted_students:
+    print(f"{student.name}: {student.score}")
+    
+   
+# Sorting Characters in a string
+# Given a string, sort the letters using a counting sort
+
+def counting_sort_string(input_str):
+  max_char = ord(max(input_str))
+  count = [0] * (max_char + 1)
+  
+  for char in input_str:
+    count[ord(char)] += 1
+    
+    sorted_str = ""
+    for char in range(len(count)):
+      sorted_str += chr(char) * count[char]
+      
+  return sorted_str
+
+my_string = 'Veronica Emily Scerra'
+sorted_string = counting_sort_string(my_string.lower())
+
+print(f"Original string: {my_string}")
+print(f"Sorted string: {sorted_string}")
+
+#%% 
