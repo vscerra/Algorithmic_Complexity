@@ -154,4 +154,81 @@ sorted_string = counting_sort_string(my_string.lower())
 print(f"Original string: {my_string}")
 print(f"Sorted string: {sorted_string}")
 
-#%% 
+#%% Merge Sort
+
+# Merge sort algorithms sort arrays into ascending order
+
+# Example 1, given an array, return that array in ascending order by splitting 
+# into two halves, then working through both halves to create a sorted array
+
+def merge_sort(arr):
+    if len(arr) <= 1:
+      return arr
+
+    mid = len(arr) // 2
+    left = merge_sort(arr[:mid])
+    right = merge_sort(arr[mid:])
+    
+    return merge(left, right)
+
+
+def merge(left, right):
+    result = []
+    i = j = 0
+
+    while i < len(left) and j < len(right):
+        if left[i] < right[j]:
+            result.append(left[i])
+            i += 1 
+        else: 
+            result.append(right[j])
+            j += 1
+    
+    result.extend(left[i:])
+    result.extend(right[j:])
+    return result
+
+# Example usage:
+my_list = [0, 4, 2, 3, 3, 5, 6, 9]
+
+sorted_list = merge_sort(my_list)
+print(f"Original array: {my_list}")
+print(f"Sorted array: {sorted_list}")
+
+# Example 2 Given an array, count how many inversions are necessary to sort the array
+
+def count_inversions(arr):
+  if len(arr) <= 1:
+    return arr, 0
+  
+  mid = len(arr) // 2
+  left, inv_left = count_inversions(arr[:mid])
+  right, inv_right = count_inversions(arr[mid:])
+  merged, inv_merged = merge_and_count(left, right)
+  total_inversions = inv_left + inv_right + inv_merged
+  return merged, total_inversions
+
+def merge_and_count(left, right):
+  result = []
+  i = j = inversions = 0
+  while i < len(left) and j < len(right):
+    if left[i] <= right[j]:
+      result.append(left[i])
+      i += 1
+    else: 
+      result.append(right[j])
+      inversions += len(left) - i
+      j += 1
+      
+  result.extend(left[i:])
+  result.extend(right[j:])
+  return result, inversions
+
+# Example usage: 
+my_list = [1, 0, 3, 0, 4, 2, 2, 6]
+sorted_list, inversions = count_inversions(my_list)
+
+print(f'Original array: {my_list}')
+print(f'Sorted array: {sorted_list}')
+print(f'Number of inversions necessary to sort list: {inversions}')
+
